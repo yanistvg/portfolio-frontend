@@ -1,5 +1,5 @@
 import { Flex, Text, View } from "@aws-amplify/ui-react";
-import { navigationBtn, NAV_MAX_WIDTH } from "./navigatiorDatas";
+import { navigationBtn, NAV_MAX_WIDTH, extractElementFromNavigationBtn, NavigationInfo } from "./navigatiorDatas";
 import { FaAngleDoubleLeft } from "react-icons/fa";
 import { useEffect, useState } from "react";
 
@@ -7,13 +7,21 @@ import "./Navigator.scss";
 
 export function Navigator(): JSX.Element {
     const [ navOpened, setNavOpened ] = useState<boolean>(false);
+    const [ routeDir, setRouteDir ] = useState<string>("/");
+    const [ contentPage, setContentPage ] = useState<JSX.Element>(<></>);
 
     useEffect(() => {
-        let navInfo: string | null = localStorage.getItem('navigationState');
+        let routeDir: string | null = localStorage.getItem('routeDir');
+        if (!routeDir) {
+            routeDir = "/";
+            localStorage.setItem('routeDir', routeDir);
+        }
+        setRouteDir(routeDir);
 
+        let navInfo: string | null = localStorage.getItem('navigationState');
         if (!navInfo) {
-            localStorage.setItem('navigationState', 'false');
             navInfo = 'false';
+            localStorage.setItem('navigationState', navInfo);
         }
 
         return navInfo === 'true'
@@ -22,54 +30,69 @@ export function Navigator(): JSX.Element {
         ;
     }, []);
 
-    return (
-        <View
-            width={NAV_MAX_WIDTH}
-            id={'navigator-racine'}
-            className={!navOpened ? "navigation-closed" : ""}
-        >
+    useEffect(() => {
+        const nav: NavigationInfo = extractElementFromNavigationBtn(routeDir);
+        localStorage.setItem('routeDir', nav.link);
+        document.title = nav.name;
+        setContentPage(nav.content ?? <></>);
+    }, [ routeDir ]);
 
-            <View className={"navigation-close-navBar"}>
-                <FaAngleDoubleLeft
-                    height={2}
-                    onClick={() => {
-                        localStorage.setItem('navigationState', (!navOpened).toString());
-                        setNavOpened(!navOpened);
-                    }}
-                />
+    return (
+        <View>
+
+            <View id={"page-content"}>
+                { contentPage }
             </View>
 
-            {navigationBtn.map((navGroup, i) => {
-                return (
-                    <Flex
-                        direction={'column'}
-                        key={i}
-                    >
-                        <Text className={"navigation-title"}>{navGroup.name}</Text>
-                        {navGroup.nav.map((nav, y) => {
-                            return (
-                                <Flex
-                                    key={y}
-                                    className={"navigation-button"}
-                                    onClick={() => {
-                                        if (nav.isExternalLink) {
-                                            window.open(nav.link);
-                                            return;
-                                        }
-                                        window.history.replaceState(null, nav.name, nav.link);
-                                        document.title = nav.name;
-                                    }}
-                                >
-                                    <Flex>
-                                        { nav.icon }
-                                        <Text>{nav.name}</Text>
+            <View
+                width={NAV_MAX_WIDTH}
+                id={'navigator-racine'}
+                className={!navOpened ? "navigation-closed" : ""}
+            >
+
+                <View className={"navigation-close-navBar"}>
+                    <FaAngleDoubleLeft
+                        height={2}
+                        onClick={() => {
+                            localStorage.setItem('navigationState', (!navOpened).toString());
+                            setNavOpened(!navOpened);
+                        }}
+                    />
+                </View>
+
+                {navigationBtn.map((navGroup, i) => {
+                    return (
+                        <Flex
+                            direction={'column'}
+                            key={i}
+                            className={"navigator-group"}
+                        >
+                            <Text className={"navigation-title"}>{navGroup.name}</Text>
+                            {navGroup.nav.map((nav, y) => {
+                                return (
+                                    <Flex
+                                        key={y}
+                                        className={"navigation-button"}
+                                        onClick={() => {
+                                            if (nav.isExternalLink) {
+                                                window.open(nav.link);
+                                                return;
+                                            }
+                                            setRouteDir(nav.link);
+                                        }}
+                                    >
+                                        <Flex>
+                                            { nav.icon }
+                                            <Text>{nav.name}</Text>
+                                        </Flex>
                                     </Flex>
-                                </Flex>
-                            );
-                        })}
-                    </Flex>
-                );
-            })}
+                                );
+                            })}
+                        </Flex>
+                    );
+                })}
+
+            </View>
 
         </View>
     );

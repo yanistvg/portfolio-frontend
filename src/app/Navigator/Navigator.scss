@@ -2,12 +2,14 @@
 
     position: fixed;
     padding: 1em!important;
-    background-color: var(--amplify-colors-border-secondary);
+    background-color: var(--navigator-background-color);
     top: 0; left: 0; bottom: 0;
-    border-right: 1px solid var(--amplify-components-button-color);
+    border-right: 1px solid var(--navigator-icon-color);
     overflow-y: auto;
     scrollbar-width: 10px;
     transition-duration: 0.5s;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 
     .navigation-close-navBar {
         margin-bottom: 1em;
@@ -18,16 +20,22 @@
             cursor: pointer;
             transition-duration: 1s;
             transition-delay: 0.3s;
+            color: var(--navigator-icon-color);
         }
     }
 
-    div {
+    .navigator-group {
+        row-gap: 0!important;
+        column-gap: 0!important;
+        margin-bottom: 3em;
+
         .navigation-title {
             text-align: center;
             font-weight: bold;
             font-size: 1.3em;
-            border-bottom: 1px solid var(--amplify-components-button-color);
-            border-top: 1px solid var(--amplify-components-button-color);
+            border-bottom: 1px solid var(--navigator-icon-color);
+            border-top: 1px solid var(--navigator-icon-color);
+            color: var(--navigator-title-color);
         }
     
         .navigation-button {
@@ -42,7 +50,10 @@
                     font-size: 1.2em;
                     padding: 0.4em;
                     border: none;
+                    color: var(--navigator-text-color);
                 }
+
+                svg { color: var(--navigator-icon-color); }
 
             }
     
@@ -57,19 +68,22 @@
     scrollbar-width: 0px;
 
     .navigation-close-navBar {
-
-        svg {
-            rotate: 180deg;
-        }
+        svg { rotate: 180deg; }
     }
 
-    div {
-        display: none;
-    }
+    .navigator-group { display: none; }
 
 }
 
 body {
     margin-bottom: 0px!important;
     margin-top: 0px!important;
+}
+
+#page-content {
+    position: fixed;
+    top: 0;
+    left: 40px;
+    right: 0;
+    padding: 30px;
 }
