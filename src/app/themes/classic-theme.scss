@@ -1,0 +1,10 @@
+* {
+    --navigator-background-color: #26577C;
+    --navigator-title-color: #A6A6A5;
+    --navigator-text-color: #EBE4D1;
+    --navigator-icon-color: #E55604;
+
+    --body-background-color: var(--navigator-text-color);
+}
+
+body { background-color: var(--body-background-color); }
