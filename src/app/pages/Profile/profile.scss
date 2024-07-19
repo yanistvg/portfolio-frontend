@@ -1,0 +1,40 @@
+#page-profile {
+
+    background-color: var(--body-background-color);
+
+    #profile-header {
+        #profile-header-title {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        #profile-header-content {
+            font-size: 1.2em;
+            text-align: justify;
+        }
+    }
+    #profile-academy {
+        #profile-academy-title {
+            font-size: 1.7em;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        #profile-academy-context {
+            font-size: 1.2em;
+            text-align: justify;
+        }
+    }
+    #profile-technic {
+        #profile-technic-title {
+            font-size: 1.7em;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        #profile-technic-content {
+            font-size: 1.2em;
+            text-align: justify;
+        }
+    }
+
+    #profile-loader { width: 5em; }
+    #profile-loader-text { font-weight: bold; }
+}
